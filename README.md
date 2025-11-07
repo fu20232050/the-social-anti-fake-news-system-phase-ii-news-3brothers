@@ -51,9 +51,18 @@ F4: Voting System - Vote whether news is fake or authentic
 The application is deployed on Vercel. You can access it at: [https://the-social-anti-fake-news-system-ph-sandy.vercel.app/](https://the-social-anti-fake-news-system-ph-sandy.vercel.app/)
 
 ## 9. Submission
-The Video is here. You can access it at: [https://the-social-anti-fake-news-system-ph-sandy.vercel.app/](https://the-social-anti-fake-news-system-ph-sandy.vercel.app/)
+The Video is here. You can access it at: 
 
+<!-- 方法1：使用HTML video标签嵌入本地MP4文件 -->
+<video width="640" height="360" controls>
+  <source src="path/to/your/video.mp4" type="video/mp4">
+  您的浏览器不支持视频标签。
+</video>
 
+<!-- 方法2：如果视频已上传到视频平台(如YouTube)，可以使用iframe嵌入 -->
+<!--
+<iframe width="640" height="360" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+-->
 
 ### Prerequisites
 - Node.js (v14 or higher)
