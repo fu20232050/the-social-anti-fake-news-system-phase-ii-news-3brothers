@@ -57,6 +57,13 @@ The Video is here. You can access it at: [local video link](src/assets/videos/Su
   <source src="src/assets/videos/Submission.mp4" type="video/mp4">
 </video>
 
+GitHub:
+https://github.com/chartchai-class/the-social-anti-fake-news-system-phase-ii-team-name-not-found-404
+
+GitHub:
+https://github.com/fu20232050/the-social-anti-fake-news-system-phase-ii-news-3brothers
+
+
 ### Prerequisites
 - Node.js (v14 or higher)
 - npm or yarn
