@@ -51,17 +51,11 @@ F4: Voting System - Vote whether news is fake or authentic
 The application is deployed on Vercel. You can access it at: [https://the-social-anti-fake-news-system-ph-sandy.vercel.app/](https://the-social-anti-fake-news-system-ph-sandy.vercel.app/)
 
 ## 9. Submission
-The Video is here. You can access it at: [视频链接](https://example.com/your-video)  
+The Video is here. You can access it at: [local video link](src/assets/videos/Submission.mp4)  
 
-*注意：要添加实际视频，请按以下步骤操作：*
-1. 将MP4视频文件上传到项目的public/videos目录（需要先创建此目录）
-2. 然后在README.md中使用以下代码：
-```html
 <video width="640" height="360" controls>
-  <source src="/videos/Submission.mp4" type="video/mp4">
-  您的浏览器不支持视频标签。
+  <source src="src/assets/videos/Submission.mp4" type="video/mp4">
 </video>
-```
 
 ### Prerequisites
 - Node.js (v14 or higher)
