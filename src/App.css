@@ -1,0 +1,67 @@
+.App {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+/* 调整卡片样式 */
+.card {
+  border-radius: 0.5rem;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* 表格样式调整 */
+.table {
+  margin-bottom: 0;
+}
+
+/* 调整图片样式 */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 调整按钮组样式 */
+.btn-group {
+  margin-bottom: 1rem;
+}
+
+/* 页面头部样式 */
+h1, .h1 {
+  color: #343a40;
+  font-weight: 700;
+}
+
+/* 加载状态样式 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+/* 错误提示样式 */
+.error {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+/* 成功提示样式 */
+.success {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}

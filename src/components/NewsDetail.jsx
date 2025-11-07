@@ -1,0 +1,243 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { mockNews } from '../data/mockData';
+
+const NewsDetail = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [news, setNews] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [showComments, setShowComments] = useState(true);
+  const [pageSize, setPageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    // Find the news item by ID
+    const foundNews = mockNews.find(item => item.id === Number(id));
+    if (foundNews) {
+      setNews(foundNews);
+      setComments(foundNews.comments || []);
+    } else {
+      // News not found
+      alert('News item not found!');
+      navigate('/');
+    }
+  }, [id, navigate]);
+
+  // Format date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
+
+  // Calculate pagination for comments
+  const totalCommentPages = Math.ceil(comments.length / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const currentComments = comments.slice(startIndex, endIndex);
+
+  // Periodically update comments from mock data to reflect changes made in VotePage
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const updatedNews = mockNews.find(item => item.id === Number(id));
+      if (updatedNews && updatedNews.comments) {
+        setComments(updatedNews.comments);
+        // Also update votes and other news data if changed
+        if (JSON.stringify(news) !== JSON.stringify(updatedNews)) {
+          setNews(updatedNews);
+        }
+      }
+    }, 1000); // Check every second
+
+    return () => clearInterval(interval);
+  }, [id, news]);
+
+  // Removed handleDetermineNews function as per requirements
+
+  if (!news) {
+    return <div className="container mt-5">Loading...</div>;
+  }
+
+  return (
+    <div className="container mt-5">
+      <button onClick={() => navigate('/')} className="btn btn-secondary mb-4">
+        Back to News List
+      </button>
+
+      {/* News Details */}
+      <div className="card mb-5">
+        <div className="card-body">
+          <div className="d-flex justify-content-between align-items-start flex-wrap">
+            <h1 className="card-title">{news.topic}</h1>
+            <span className={`badge ${news.status === 'fake' ? 'badge-danger' : 'badge-success'} text-lg`}>
+              {news.status === 'fake' ? 'Fake News' : 'Not Fake News'}
+            </span>
+          </div>
+          
+          {news.image && (
+            <img 
+              src={news.image} 
+              alt={news.topic} 
+              className="img-fluid my-4 rounded"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'https://via.placeholder.com/600x400?text=News+Image';
+              }}
+            />
+          )}
+          
+          <p className="card-text lead">{news.fullDetail}</p>
+          
+          <div className="d-flex justify-content-between text-secondary mt-4">
+            <div>
+              <strong>Reported by:</strong> {news.reporter}
+            </div>
+            <div>
+              <strong>Date:</strong> {formatDate(news.dateTime)}
+            </div>
+          </div>
+          
+          <div className="mt-4">
+            <h5>Vote Results:</h5>
+            <div className="d-flex flex-wrap gap-3">
+              <div>
+                <span className="badge badge-danger mr-2">Fake:</span> 
+                <span>{news.votes.fake}</span>
+              </div>
+              <div>
+                <span className="badge badge-success mr-2">Not Fake:</span> 
+                <span>{news.votes.notFake}</span>
+              </div>
+              <div className="ml-auto">
+                <strong>Total Votes:</strong> {news.votes.fake + news.votes.notFake}
+              </div>
+            </div>
+          </div>
+          
+          {/* Removed determination section as per requirements */}
+        </div>
+      </div>
+
+      {/* Comments Section */}
+      <div className="card">
+        <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h4>Comments and Votes</h4>
+          <button 
+            onClick={() => setShowComments(!showComments)}
+            className="btn btn-light btn-sm"
+          >
+            {showComments ? 'Hide' : 'Show'} Comments
+          </button>
+        </div>
+        
+        {showComments && (
+          <div className="card-body">
+            {/* Vote and Comment Button */}
+            <div className="d-flex justify-content-end mb-4">
+              <button 
+                onClick={() => navigate(`/vote/${id}`)}
+                className="btn btn-primary"
+              >
+                Vote & Comment
+              </button>
+            </div>
+
+            {/* Comments List */}
+            <div>
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <h5>Comments ({comments.length})</h5>
+                <div>
+                  <label htmlFor="commentPageSize" className="mr-2">Comments per page:</label>
+                  <select 
+                    id="commentPageSize" 
+                    className="form-control form-control-sm" 
+                    value={pageSize} 
+                    onChange={(e) => {
+                      setPageSize(Number(e.target.value));
+                      setCurrentPage(1);
+                    }}
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                  </select>
+                </div>
+              </div>
+              
+              {currentComments.length > 0 ? (
+                <div className="comment-list">
+                  {currentComments.map(comment => (
+                    <div key={comment.id} className="border p-3 rounded mb-3">
+                      <div className="d-flex justify-content-between">
+                        <strong>{comment.user}</strong>
+                        <span className={`badge ${comment.vote === 'fake' ? 'badge-danger' : comment.vote === 'undetermined' ? 'badge-warning' : 'badge-success'}`}>
+                          {comment.vote === 'fake' ? 'Fake' : comment.vote === 'undetermined' ? 'Undetermined' : 'Not Fake'}
+                        </span>
+                      </div>
+                      <p className="mt-2">{comment.comment}</p>
+                      {comment.image && (
+                        <img 
+                          src={comment.image} 
+                          alt="Comment attachment" 
+                          className="img-fluid mt-2 rounded"
+                          style={{ maxHeight: '200px' }}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                      )}
+                      <div className="text-right text-muted text-sm mt-2">
+                        {formatDate(comment.dateTime)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="alert alert-info">No comments yet. Be the first to comment!</div>
+              )}
+
+              {/* Comment Pagination */}
+              {totalCommentPages > 1 && (
+                <nav className="mt-4" aria-label="Comment navigation">
+                  <ul className="pagination justify-content-center">
+                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                      <button 
+                        className="page-link" 
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                    {Array.from({ length: totalCommentPages }, (_, index) => index + 1).map(page => (
+                      <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+                        <button 
+                          className="page-link" 
+                          onClick={() => setCurrentPage(page)}
+                        >
+                          {page}
+                        </button>
+                      </li>
+                    ))}
+                    <li className={`page-item ${currentPage === totalCommentPages ? 'disabled' : ''}`}>
+                      <button 
+                        className="page-link" 
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalCommentPages))}
+                        disabled={currentPage === totalCommentPages}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default NewsDetail;
