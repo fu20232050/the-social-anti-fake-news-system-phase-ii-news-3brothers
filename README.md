@@ -3,9 +3,9 @@
 ## Group Information
 - **Group Name**: FactCheckers
 - **Members**:
-  - Student ID: 123456, Name: Jane Smith
-  - Student ID: 654321, Name: John Doe
-  - Student ID: 112233, Name: Alice Johnson
+  - Student ID: 20232050, Name: fuyilin
+  - Student ID: 20232094, Name: wangyuhan
+  - Student ID: 20232076, Name: yuantaixian
 
 ## Project Description
 The Social Anti-Fake News System is a web application that leverages collective wisdom to identify and combat fake news. Users can submit news stories, view all submitted news, vote on whether news is fake or authentic, and provide comments with supporting evidence.
@@ -34,7 +34,7 @@ The Social Anti-Fake News System is a web application that leverages collective 
 ### Installation
 1. Clone the repository
    ```bash
-   git clone https://github.com/yourusername/social-anti-fake-news.git
+   git clone https://github.com/fu202322050/social-anti-fake-news.git
    cd social-anti-fake-news
    ```
 
