@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { mockNews } from '../data/mockData';
+import { useAuth } from '../contexts/AuthContext';
+import { fetchNewsDetail, deleteNews, deleteComment } from '../services/newsService';
 
 const NewsDetail = () => {
   const { id } = useParams();
@@ -10,18 +11,33 @@ const NewsDetail = () => {
   const [showComments, setShowComments] = useState(true);
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const { isAdmin } = useAuth();
+  const [commentDeleteError, setCommentDeleteError] = useState('');
 
   useEffect(() => {
-    // Find the news item by ID
-    const foundNews = mockNews.find(item => item.id === Number(id));
-    if (foundNews) {
-      setNews(foundNews);
-      setComments(foundNews.comments || []);
-    } else {
-      // News not found
-      alert('News item not found!');
-      navigate('/');
-    }
+    const loadNewsDetail = async () => {
+      setLoading(true);
+      try {
+        const newsDetail = await fetchNewsDetail(Number(id));
+        if (newsDetail) {
+          setNews(newsDetail);
+          setComments(newsDetail.comments || []);
+        } else {
+          // News not found or deleted and user is not admin
+          alert('News item not found!');
+          navigate('/');
+        }
+      } catch (error) {
+        console.error('Failed to load news detail:', error);
+        alert('Failed to load news detail');
+        navigate('/');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadNewsDetail();
   }, [id, navigate]);
 
   // Format date
@@ -36,26 +52,76 @@ const NewsDetail = () => {
   const endIndex = startIndex + pageSize;
   const currentComments = comments.slice(startIndex, endIndex);
 
-  // Periodically update comments from mock data to reflect changes made in VotePage
+  // Regularly update comments and vote data
   useEffect(() => {
-    const interval = setInterval(() => {
-      const updatedNews = mockNews.find(item => item.id === Number(id));
-      if (updatedNews && updatedNews.comments) {
-        setComments(updatedNews.comments);
-        // Also update votes and other news data if changed
-        if (JSON.stringify(news) !== JSON.stringify(updatedNews)) {
-          setNews(updatedNews);
+    const interval = setInterval(async () => {
+      try {
+        const updatedNews = await fetchNewsDetail(Number(id));
+        if (updatedNews && updatedNews.comments) {
+          setComments(updatedNews.comments);
+          // 同时更新投票和其他新闻数据
+          if (JSON.stringify(news) !== JSON.stringify(updatedNews)) {
+            setNews(updatedNews);
+          }
         }
+      } catch (error) {
+        console.error('Failed to update news data:', error);
       }
-    }, 1000); // Check every second
+    }, 3000); // 每3秒检查一次
 
     return () => clearInterval(interval);
   }, [id, news]);
 
   // Removed handleDetermineNews function as per requirements
 
-  if (!news) {
+  // Delete news
+  const handleDeleteNews = async () => {
+    if (!isAdmin()) {
+      alert('Only administrators can delete news');
+      return;
+    }
+    
+    if (window.confirm('Are you sure you want to delete this news?')) {
+      try {
+        await deleteNews(Number(id));
+        alert('News deleted successfully');
+        navigate('/');
+      } catch (error) {
+        console.error('Failed to delete news:', error);
+        alert(error.message || 'Failed to delete news');
+      }
+    }
+  };
+
+  // Delete comment
+  const handleDeleteComment = async (commentId) => {
+    if (!isAdmin()) {
+      alert('Only administrators can delete comments');
+      return;
+    }
+    
+    if (window.confirm('Are you sure you want to delete this comment?')) {
+      try {
+        setCommentDeleteError('');
+        await deleteComment(Number(id), commentId);
+        // 重新加载评论数据
+        const updatedNews = await fetchNewsDetail(Number(id));
+        if (updatedNews && updatedNews.comments) {
+          setComments(updatedNews.comments);
+        }
+      } catch (error) {
+        console.error('Failed to delete comment:', error);
+        setCommentDeleteError(error.message || 'Failed to delete comment');
+      }
+    }
+  };
+
+  if (loading) {
     return <div className="container mt-5">Loading...</div>;
+  }
+  
+  if (!news) {
+    return <div className="container mt-5">News not found!</div>;
   }
 
   return (
@@ -68,9 +134,15 @@ const NewsDetail = () => {
       <div className="card mb-5">
         <div className="card-body">
           <div className="d-flex justify-content-between align-items-start flex-wrap">
-            <h1 className="card-title">{news.topic}</h1>
-            <span className={`badge ${news.status === 'fake' ? 'badge-danger' : 'badge-success'} text-lg`}>
-              {news.status === 'fake' ? 'Fake News' : 'Not Fake News'}
+            <h1 className="card-title">
+              {news.topic}
+              {news.deleted && <span className="ml-3 text-danger">[DELETED]</span>}
+            </h1>
+            <span className={`badge ${news.status === 'fake' ? 'badge-danger' : 
+                                  news.status === 'undetermined' ? 'badge-warning' : 'badge-success'} 
+                                  text-lg ${news.deleted ? 'bg-gray' : ''}`}>
+              {news.status === 'fake' ? 'Fake News' : 
+               news.status === 'undetermined' ? 'Undetermined' : 'Not Fake News'}
             </span>
           </div>
           
@@ -108,11 +180,29 @@ const NewsDetail = () => {
                 <span className="badge badge-success mr-2">Not Fake:</span> 
                 <span>{news.votes.notFake}</span>
               </div>
+              {news.votes.undetermined && (
+                <div>
+                  <span className="badge badge-warning mr-2">Undetermined:</span> 
+                  <span>{news.votes.undetermined}</span>
+                </div>
+              )}
               <div className="ml-auto">
-                <strong>Total Votes:</strong> {news.votes.fake + news.votes.notFake}
+                <strong>Total Votes:</strong> {news.votes.fake + news.votes.notFake + (news.votes.undetermined || 0)}
               </div>
             </div>
           </div>
+          
+          {/* Admin Delete Button */}
+          {isAdmin() && (
+            <div className="mt-4">
+              <button 
+                onClick={handleDeleteNews}
+                className="btn btn-danger"
+              >
+                Delete News
+              </button>
+            </div>
+          )}
           
           {/* Removed determination section as per requirements */}
         </div>
@@ -190,6 +280,14 @@ const NewsDetail = () => {
                       <div className="text-right text-muted text-sm mt-2">
                         {formatDate(comment.dateTime)}
                       </div>
+                      {isAdmin() && (
+                        <button 
+                          className="btn btn-sm btn-danger mt-2"
+                          onClick={() => handleDeleteComment(comment.id)}
+                        >
+                          Delete Comment
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -198,6 +296,9 @@ const NewsDetail = () => {
               )}
 
               {/* Comment Pagination */}
+              {commentDeleteError && (
+                <div className="alert alert-danger mb-3">{commentDeleteError}</div>
+              )}
               {totalCommentPages > 1 && (
                 <nav className="mt-4" aria-label="Comment navigation">
                   <ul className="pagination justify-content-center">

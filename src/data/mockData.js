@@ -1,5 +1,46 @@
-// Mock data for Social Anti-Fake News System with 40+ news items
-export const mockNews = [
+// Mock data for Social Anti-Fake News System
+
+// 模拟用户数据 - 包含一些测试用户
+export let mockUsers = [
+  {
+    id: '1',
+    firstName: 'Admin',
+    lastName: 'User',
+    email: 'admin@example.com',
+    password: 'Admin123!', // 注意：实际应用中应使用密码哈希
+    avatar: '/src/assets/images/blank-image.svg',
+    role: 'admin',
+    createdAt: '2024-01-01T00:00:00Z'
+  },
+  {
+    id: '2',
+    firstName: 'Member',
+    lastName: 'User',
+    email: 'member@example.com',
+    password: 'Member123!',
+    avatar: '/src/assets/images/blank-image.svg',
+    role: 'member',
+    createdAt: '2024-01-02T00:00:00Z'
+  },
+  {
+    id: '3',
+    firstName: 'Reader',
+    lastName: 'User',
+    email: 'reader@example.com',
+    password: 'Reader123!',
+    avatar: '/src/assets/images/blank-image.svg',
+    role: 'reader',
+    createdAt: '2024-01-03T00:00:00Z'
+  }
+];
+
+// 设置模拟用户数据的函数
+export const setMockUsers = (users) => {
+  mockUsers = users;
+};
+
+// 模拟新闻数据 - 包含40+条新闻
+let mockNewsList = [
   // News items with various statuses (fake, notFake, undetermined)
   {
     id: 1,
@@ -9,7 +50,7 @@ export const mockNews = [
     status: "fake",
     reporter: "Zhang Ming",
     dateTime: "2024-01-15T08:30:00",
-    image: "https://example.com/images/ai-mind-reading.jpg",
+    image: "/src/assets/images/blank-image.svg",
     votes: {
       fake: 2,
       notFake: 8
@@ -29,7 +70,7 @@ export const mockNews = [
         vote: "fake",
         comment: "I'm a medical professional and can confirm these claims are false.",
         dateTime: "2023-10-15T16:20:00",
-        image: "https://example.com/images/medical-explanation.jpg"
+        image: "/src/assets/images/blank-image.svg"
       }
     ]
   },
@@ -41,7 +82,7 @@ export const mockNews = [
     status: "notFake",
     reporter: "Zhao Jing",
     dateTime: "2024-01-14T14:20:00",
-    image: "https://example.com/images/beverage-safety.jpg",
+    image: "/src/assets/images/blank-image.svg",
     votes: {
       fake: 7,
       notFake: 2
@@ -65,7 +106,7 @@ export const mockNews = [
     status: "notFake",
     reporter: "Wu Wei",
     dateTime: "2024-01-13T10:15:00",
-    image: "https://example.com/images/ev-battery.jpg",
+    image: "/src/assets/images/blank-image.svg",
     votes: {
       fake: 3,
       notFake: 5
@@ -77,7 +118,7 @@ export const mockNews = [
         vote: "fake",
         comment: "As an epidemiologist, I can confirm there is absolutely no scientific basis for this claim.",
         dateTime: "2023-10-13T17:20:00",
-        image: "https://example.com/images/scientific-evidence.jpg"
+        image: "/src/assets/images/blank-image.svg"
       }
     ]
   },
@@ -89,7 +130,7 @@ export const mockNews = [
     status: "fake",
     reporter: "Sun Yi",
     dateTime: "2024-01-12T09:45:00",
-    image: "https://example.com/images/banana-claim.jpg",
+    image: "/src/assets/images/blank-image.svg",
     votes: {
       fake: 10,
       notFake: 2
@@ -113,7 +154,7 @@ export const mockNews = [
     status: "notFake",
     reporter: "He Jian",
     dateTime: "2024-01-11T16:30:00",
-    image: "https://example.com/images/subway-5g.jpg",
+    image: "/src/assets/images/blank-image.svg",
     votes: {
       fake: 1,
       notFake: 12
@@ -137,7 +178,7 @@ export const mockNews = [
     status: "fake",
     reporter: "Ma Chao",
     dateTime: "2024-01-10T11:20:00",
-    image: "https://example.com/images/cell-phone-radiation.jpg",
+    image: "/src/assets/images/blank-image.svg",
     votes: {
       fake: 8,
       notFake: 3
@@ -151,7 +192,7 @@ export const mockNews = [
     status: "undetermined",
     reporter: "Lin Xiao",
     dateTime: "2024-01-09T14:30:00",
-    image: "https://example.com/images/climate-report.jpg",
+    image: "/src/assets/images/blank-image.svg",
     votes: {
       fake: 5,
       notFake: 4
@@ -175,7 +216,7 @@ export const mockNews = [
     status: "notFake",
     reporter: "Lin Xia",
     dateTime: "2024-01-09T13:10:00",
-    image: "https://example.com/images/cancer-research.jpg",
+    image: "/src/assets/images/blank-image.svg",
     votes: {
       fake: 2,
       notFake: 15
@@ -199,7 +240,7 @@ export const mockNews = [
     status: "fake",
     reporter: "Wang Lei",
     dateTime: "2024-01-08T15:40:00",
-    image: "https://example.com/images/pyramid-theory.jpg",
+    image: "/src/assets/images/blank-image.svg",
     votes: {
       fake: 18,
       notFake: 4
@@ -223,7 +264,7 @@ export const mockNews = [
     status: "undetermined",
     reporter: "Chen Hui",
     dateTime: "2024-01-07T10:00:00",
-    image: "https://example.com/images/organic-food.jpg",
+    image: "/src/assets/images/blank-image.svg",
     votes: {
       fake: 4,
       notFake: 6
@@ -247,7 +288,7 @@ export const mockNews = [
     status: "undetermined",
     reporter: "Liu Yang",
     dateTime: "2024-01-06T09:25:00",
-    image: "https://example.com/images/quantum-computing.jpg",
+    image: "/src/assets/images/blank-image.svg",
     votes: {
         fake: 5,
         notFake: 4
@@ -262,7 +303,7 @@ export const mockNews = [
       status: "fake",
       reporter: "Huang Wei",
       dateTime: "2024-01-05T14:25:00",
-      image: "https://example.com/images/smartphone-vision.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 12,
         notFake: 3
@@ -277,7 +318,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Li Na",
       dateTime: "2024-01-04T09:15:00",
-      image: "https://example.com/images/green-tea-study.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 2,
         notFake: 18
@@ -292,7 +333,7 @@ export const mockNews = [
       status: "undetermined",
       reporter: "Zhang Hong",
       dateTime: "2024-01-03T11:40:00",
-      image: "https://example.com/images/social-media-tax.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 6,
         notFake: 3
@@ -307,7 +348,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Chen Ming",
       dateTime: "2024-01-02T15:30:00",
-      image: "https://example.com/images/coffee-longevity.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 1,
         notFake: 22
@@ -322,7 +363,7 @@ export const mockNews = [
       status: "fake",
       reporter: "Wang Jun",
       dateTime: "2024-01-01T10:20:00",
-      image: "https://example.com/images/5g-immune.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 25,
         notFake: 4
@@ -337,7 +378,7 @@ export const mockNews = [
       status: "undetermined",
       reporter: "Liu Xin",
       dateTime: "2023-12-31T13:45:00",
-      image: "https://example.com/images/ev-fast-charging.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 4,
         notFake: 7
@@ -352,7 +393,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Zhang Wei",
       dateTime: "2023-12-30T08:50:00",
-      image: "https://example.com/images/vitamin-d-office.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 1,
         notFake: 15
@@ -367,7 +408,7 @@ export const mockNews = [
       status: "fake",
       reporter: "Li Jing",
       dateTime: "2023-12-29T14:30:00",
-      image: "https://example.com/images/air-fryer-safety.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 8,
         notFake: 5
@@ -382,7 +423,7 @@ export const mockNews = [
       status: "undetermined",
       reporter: "Chen Hao",
       dateTime: "2023-12-28T11:15:00",
-      image: "https://example.com/images/plastic-fuel-tech.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 3,
         notFake: 6
@@ -397,7 +438,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Zhao Lin",
       dateTime: "2023-12-27T09:30:00",
-      image: "https://example.com/images/walking-cognition.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 0,
         notFake: 20
@@ -412,7 +453,7 @@ export const mockNews = [
       status: "fake",
       reporter: "Wang Xiao",
       dateTime: "2023-12-26T15:45:00",
-      image: "https://example.com/images/vaccine-microchip.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 30,
         notFake: 5
@@ -427,7 +468,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Li Hao",
       dateTime: "2023-12-25T10:20:00",
-      image: "https://example.com/images/plant-based-carbon.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 2,
         notFake: 17
@@ -442,7 +483,7 @@ export const mockNews = [
       status: "undetermined",
       reporter: "Zhang Lin",
       dateTime: "2023-12-24T14:10:00",
-      image: "https://example.com/images/ai-stock-prediction.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 7,
         notFake: 3
@@ -457,7 +498,7 @@ export const mockNews = [
       status: "fake",
       reporter: "Huang Lin",
       dateTime: "2023-12-23T11:45:00",
-      image: "https://example.com/images/phone-pillow.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 14,
         notFake: 4
@@ -472,7 +513,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Chen Wei",
       dateTime: "2023-12-22T09:15:00",
-      image: "https://example.com/images/mediterranean-diet.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 1,
         notFake: 24
@@ -487,7 +528,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Liu Ming",
       dateTime: "2023-12-21T16:30:00",
-      image: "https://example.com/images/electric-bus-plan.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 0,
         notFake: 12
@@ -502,7 +543,7 @@ export const mockNews = [
       status: "undetermined",
       reporter: "Wang Chen",
       dateTime: "2023-12-20T12:45:00",
-      image: "https://example.com/images/quantum-computer.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 5,
         notFake: 6
@@ -517,7 +558,7 @@ export const mockNews = [
       status: "fake",
       reporter: "Zhang Wei",
       dateTime: "2023-12-19T10:30:00",
-      image: "https://example.com/images/carrots-vision.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 9,
         notFake: 8
@@ -532,7 +573,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Li Lin",
       dateTime: "2023-12-18T13:20:00",
-      image: "https://example.com/images/exercise-mental-health.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 1,
         notFake: 26
@@ -547,7 +588,7 @@ export const mockNews = [
       status: "undetermined",
       reporter: "Chen Lin",
       dateTime: "2023-12-17T15:15:00",
-      image: "https://example.com/images/alzheimers-treatment.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 2,
         notFake: 9
@@ -562,7 +603,7 @@ export const mockNews = [
       status: "fake",
       reporter: "Wang Wei",
       dateTime: "2023-12-16T11:45:00",
-      image: "https://example.com/images/fluoride-water.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 17,
         notFake: 5
@@ -577,7 +618,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Zhao Wei",
       dateTime: "2023-12-15T10:10:00",
-      image: "https://example.com/images/renewable-cost.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 0,
         notFake: 19
@@ -592,7 +633,7 @@ export const mockNews = [
       status: "undetermined",
       reporter: "Zhang Lin",
       dateTime: "2023-12-14T14:25:00",
-      image: "https://example.com/images/health-selfie-app.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 8,
         notFake: 4
@@ -607,7 +648,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Li Wei",
       dateTime: "2023-12-13T09:30:00",
-      image: "https://example.com/images/organic-yield.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 2,
         notFake: 16
@@ -622,7 +663,7 @@ export const mockNews = [
       status: "fake",
       reporter: "Huang Lin",
       dateTime: "2023-12-12T15:40:00",
-      image: "https://example.com/images/5g-birds.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 15,
         notFake: 3
@@ -637,7 +678,7 @@ export const mockNews = [
       status: "undetermined",
       reporter: "Chen Wei",
       dateTime: "2023-12-11T11:15:00",
-      image: "https://example.com/images/intermittent-fasting.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 3,
         notFake: 8
@@ -652,7 +693,7 @@ export const mockNews = [
       status: "fake",
       reporter: "Wang Lin",
       dateTime: "2023-12-10T13:25:00",
-      image: "https://example.com/images/smartphone-iq.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 11,
         notFake: 6
@@ -667,7 +708,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Zhao Wei",
       dateTime: "2023-12-09T09:50:00",
-      image: "https://example.com/images/ocean-plastic.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 0,
         notFake: 22
@@ -682,7 +723,7 @@ export const mockNews = [
       status: "undetermined",
       reporter: "Zhang Wei",
       dateTime: "2023-12-08T14:30:00",
-      image: "https://example.com/images/brain-computer-interface.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 6,
         notFake: 5
@@ -697,7 +738,7 @@ export const mockNews = [
       status: "fake",
       reporter: "Li Wei",
       dateTime: "2023-12-07T12:15:00",
-      image: "https://example.com/images/vaccine-ingredients.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 18,
         notFake: 4
@@ -712,7 +753,7 @@ export const mockNews = [
       status: "notFake",
       reporter: "Chen Lin",
       dateTime: "2023-12-06T10:30:00",
-      image: "https://example.com/images/green-spaces-mental.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 1,
         notFake: 17
@@ -727,7 +768,7 @@ export const mockNews = [
       status: "fake",
       reporter: "Wang Wei",
       dateTime: "2023-12-05T15:45:00",
-      image: "https://example.com/images/ev-emissions.jpg",
+      image: "/src/assets/images/blank-image.svg",
       votes: {
         fake: 13,
         notFake: 7
@@ -735,3 +776,200 @@ export const mockNews = [
       comments: []
     }
 ];
+
+// 导出模拟新闻数据
+export const mockNews = mockNewsList;
+
+// 设置模拟新闻数据的函数
+export const setMockNews = (news) => {
+  mockNewsList = news;
+};
+
+// 根据ID删除新闻（软删除）
+export const deleteNewsById = (newsId, isAdmin = false) => {
+  try {
+    if (!isAdmin) {
+      throw new Error('Unauthorized: Only administrators can delete news');
+    }
+    
+    const newsIndex = mockNewsList.findIndex(news => news.id === newsId);
+    
+    if (newsIndex === -1) {
+      throw new Error('News not found');
+    }
+    
+    // 软删除：添加deleted标记，而不是真正删除
+    mockNewsList[newsIndex] = {
+      ...mockNewsList[newsIndex],
+      deleted: true,
+      deletedAt: new Date().toISOString()
+    };
+    
+    // 保存到localStorage
+    localStorage.setItem('mockNews', JSON.stringify(mockNewsList));
+    
+    return true;
+  } catch (error) {
+    console.error('Failed to delete news:', error);
+    throw error;
+  }
+};
+
+// 获取新闻列表（过滤已删除的新闻）
+export const getNewsList = (includeDeleted = false) => {
+  if (includeDeleted) {
+    return [...mockNewsList];
+  }
+  return mockNewsList.filter(news => !news.deleted);
+};
+
+// 根据ID获取新闻
+export const getNewsById = (newsId, includeDeleted = false) => {
+  const news = mockNewsList.find(news => news.id === newsId);
+  if (!news || (news.deleted && !includeDeleted)) {
+    return null;
+  }
+  return { ...news };
+};
+
+// 删除评论并重新计算投票得分
+export const deleteCommentById = (newsId, commentId, isAdmin = false) => {
+  try {
+    if (!isAdmin) {
+      throw new Error('Unauthorized: Only administrators can delete comments');
+    }
+    
+    const newsIndex = mockNewsList.findIndex(news => news.id === newsId);
+    
+    if (newsIndex === -1) {
+      throw new Error('News not found');
+    }
+    
+    const news = mockNewsList[newsIndex];
+    if (!news.comments || !Array.isArray(news.comments)) {
+      throw new Error('Comments not found');
+    }
+    
+    // 找到要删除的评论
+    const commentIndex = news.comments.findIndex(comment => comment.id === commentId);
+    
+    if (commentIndex === -1) {
+      throw new Error('Comment not found');
+    }
+    
+    // 获取要删除的评论的投票类型
+    const commentToDelete = news.comments[commentIndex];
+    const deletedVoteType = commentToDelete.vote;
+    
+    // 删除评论
+    news.comments = news.comments.filter(comment => comment.id !== commentId);
+    
+    // 重新计算投票得分
+    const updatedVotes = {
+      fake: 0,
+      notFake: 0,
+      undetermined: 0
+    };
+    
+    // 根据剩余评论重新计算投票
+    news.comments.forEach(comment => {
+      if (updatedVotes.hasOwnProperty(comment.vote)) {
+        updatedVotes[comment.vote]++;
+      }
+    });
+    
+    // 更新新闻的投票数据
+    mockNewsList[newsIndex] = {
+      ...mockNewsList[newsIndex],
+      comments: news.comments,
+      votes: updatedVotes,
+      lastUpdated: new Date().toISOString()
+    };
+    
+    // 保存到localStorage
+    localStorage.setItem('mockNews', JSON.stringify(mockNewsList));
+    
+    return {
+      success: true,
+      deletedVoteType,
+      updatedVotes
+    };
+  } catch (error) {
+    console.error('Failed to delete comment:', error);
+    throw error;
+  }
+};
+
+// 获取评论详情
+export const getCommentById = (newsId, commentId) => {
+  const news = mockNewsList.find(news => news.id === newsId);
+  if (!news || !news.comments) {
+    return null;
+  }
+  return news.comments.find(comment => comment.id === commentId) || null;
+};
+
+// 创建新新闻
+export const createNews = (newsData, reporterId) => {
+  try {
+    // 生成新的新闻ID（使用现有最大ID+1）
+    const maxId = mockNewsList.reduce((max, news) => news.id > max ? news.id : max, 0);
+    const newId = maxId + 1;
+    
+    // 创建新新闻对象
+    const newNews = {
+      id: newId,
+      topic: newsData.topic || '',
+      shortDetail: newsData.shortDetail || '',
+      fullDetail: newsData.fullDetail || '',
+      status: 'pending', // 初始状态为待审核
+      reporter: {
+        id: reporterId,
+        name: newsData.reporterName || 'Unknown Reporter'
+      },
+      dateTime: new Date().toISOString(),
+      image: newsData.image || null,
+      votes: {
+        fake: 0,
+        notFake: 0,
+        undetermined: 0
+      },
+      comments: [],
+      deleted: false,
+      lastUpdated: new Date().toISOString()
+    };
+    
+    // 添加到模拟数据列表
+    mockNewsList.unshift(newNews); // 添加到列表开头，使最新的新闻显示在前面
+    
+    // 保存到localStorage
+    localStorage.setItem('mockNews', JSON.stringify(mockNewsList));
+    
+    return {
+      success: true,
+      news: newNews
+    };
+  } catch (error) {
+    console.error('Failed to create news:', error);
+    throw error;
+  }
+};
+
+// 初始化mockNews数据（从localStorage读取或使用默认数据）
+const initMockNews = () => {
+  const savedNews = localStorage.getItem('mockNews');
+  if (savedNews) {
+    try {
+      const parsedNews = JSON.parse(savedNews);
+      if (Array.isArray(parsedNews)) {
+        mockNewsList.length = 0;
+        mockNewsList.push(...parsedNews);
+      }
+    } catch (error) {
+      console.error('Failed to load mock news from localStorage:', error);
+    }
+  }
+};
+
+// 初始化mockNews数据
+initMockNews();
