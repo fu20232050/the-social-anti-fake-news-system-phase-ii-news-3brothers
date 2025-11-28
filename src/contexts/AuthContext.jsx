@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { getCurrentUser, isAuthenticated, logoutUser as logoutService } from '../services/authService.js';
+import { getCurrentUser, isAuthenticated as checkAuthStatus, logoutUser as logoutService } from '../services/authService.js';
 
 // Create authentication context
 const AuthContext = createContext(null);
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initAuth = () => {
       try {
-        if (isAuthenticated()) {
+        if (checkAuthStatus()) {
           const currentUser = getCurrentUser();
           setUser(currentUser);
           setIsAuthenticated(true);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { fetchNewsList, deleteNews } from '../services/newsService';
@@ -6,28 +6,60 @@ import { fetchNewsList, deleteNews } from '../services/newsService';
 const NewsList = () => {
   const [news, setNews] = useState([]);
   const [filter, setFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
 
+  // 防抖处理搜索
+  const debounceSearch = useCallback((term) => {
+    setSearchTerm(term);
+  }, []);
+
+  // 处理搜索输入变化，添加防抖
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // 这里不需要额外操作，因为 useEffect 已经依赖 searchTerm
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  // 应用过滤和搜索逻辑 - 提取为单独函数以减少重复代码
+  const applyFilters = (newsList) => {
+    let filteredNews = newsList;
+    
+    // 应用状态筛选
+    if (filter === 'fake') {
+      filteredNews = filteredNews.filter(item => item.status === 'fake');
+    } else if (filter === 'notFake') {
+      filteredNews = filteredNews.filter(item => item.status === 'notFake' || item.status === 'not fake');
+    } else if (filter === 'undetermined') {
+      filteredNews = filteredNews.filter(item => item.status === 'undetermined');
+    }
+    
+    // 应用搜索
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase().trim();
+      filteredNews = filteredNews.filter(item => 
+        (item.topic && item.topic.toLowerCase().includes(term)) ||
+        (item.shortDetail && item.shortDetail.toLowerCase().includes(term)) ||
+        (item.reporter && item.reporter.toLowerCase().includes(term))
+      );
+    }
+    
+    return filteredNews;
+  };
+
+  // 加载新闻
   useEffect(() => {
     const loadNews = async () => {
       setLoading(true);
       try {
         // Get news list
         const newsList = await fetchNewsList();
-        
-        // 应用过滤器
-        let filteredNews = newsList;
-        if (filter === 'fake') {
-          filteredNews = newsList.filter(item => item.status === 'fake');
-        } else if (filter === 'notFake') {
-          filteredNews = newsList.filter(item => item.status === 'notFake' || item.status === 'not fake');
-        } else if (filter === 'undetermined') {
-          filteredNews = newsList.filter(item => item.status === 'undetermined');
-        }
+        const filteredNews = applyFilters(newsList);
         
         setNews(filteredNews);
         setCurrentPage(1); // 重置到第一页
@@ -40,7 +72,7 @@ const NewsList = () => {
     };
     
     loadNews();
-  }, [filter]);
+  }, [filter, searchTerm]); // 添加 searchTerm 作为依赖项
 
   // Calculate pagination
   const totalPages = Math.ceil(news.length / pageSize);
@@ -69,12 +101,9 @@ const NewsList = () => {
         await deleteNews(newsId);
         // Reload news list
         const newsList = await fetchNewsList();
-        setNews(newsList.filter(item => {
-          if (filter === 'fake') return item.status === 'fake';
-          if (filter === 'notFake') return item.status === 'notFake' || item.status === 'not fake';
-          if (filter === 'undetermined') return item.status === 'undetermined';
-          return true;
-        }));
+        const filteredNews = applyFilters(newsList);
+        
+        setNews(filteredNews);
       } catch (error) {
         console.error('Failed to delete news:', error);
         alert(error.message || 'Failed to delete news');
@@ -82,13 +111,41 @@ const NewsList = () => {
     }
   };
 
+  // 清除搜索
+  const clearSearch = () => {
+    setSearchTerm('');
+  };
+
   return (
     <div className="container mt-5">
       <h1 className="mb-4">Social Anti-Fake News System</h1>
       
-      {/* Filter controls */}
+      {/* Search controls */}
       <div className="row mb-4">
-        <div className="col-md-6">
+        <div className="col-md-6 mb-3">
+          <label htmlFor="searchTerm" className="mr-2">Search:</label>
+          <div className="input-group">
+            <input
+              type="text"
+              id="searchTerm"
+              className="form-control"
+              placeholder="Search by title, details or reporter"
+              value={searchTerm}
+              onChange={(e) => debounceSearch(e.target.value)}
+            />
+            {searchTerm && (
+              <button 
+                className="btn btn-outline-secondary" 
+                type="button"
+                onClick={clearSearch}
+                title="Clear search"
+              >
+                ×
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="col-md-3 mb-3">
           <label htmlFor="filter" className="mr-2">Filter by status:</label>
           <select 
             id="filter" 
@@ -102,7 +159,7 @@ const NewsList = () => {
             <option value="undetermined">Undetermined News</option>
           </select>
         </div>
-        <div className="col-md-6">
+        <div className="col-md-3 mb-3">
           <label htmlFor="pageSize" className="mr-2">News per page:</label>
           <select 
             id="pageSize" 
@@ -118,6 +175,15 @@ const NewsList = () => {
             <option value={20}>20</option>
           </select>
         </div>
+      </div>
+
+      {/* Search results count */}
+      <div className="mb-3 text-secondary">
+        {searchTerm || filter !== 'all' ? (
+          <strong>搜索结果共 {news.length} 条</strong>
+        ) : (
+          <strong>全部新闻共 {news.length} 条</strong>
+        )}
       </div>
 
       {/* News list */}
@@ -156,7 +222,11 @@ const NewsList = () => {
             </div>
           ))
         ) : (
-          <div className="alert alert-info">No news found matching the criteria.</div>
+          <div className="alert alert-info">
+            {searchTerm || filter !== 'all' 
+              ? `没有找到匹配 "${searchTerm}" 的${filter === 'all' ? '' : filter === 'fake' ? '假新闻' : filter === 'notFake' ? '真实新闻' : '未确定新闻'}。请尝试其他关键词。`
+              : '目前没有可用的新闻。'}
+          </div>
         )}
       </div>
 
